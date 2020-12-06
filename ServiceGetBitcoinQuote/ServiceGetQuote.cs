@@ -31,7 +31,7 @@ namespace ServiceGetBitcoinQuote
       Timer timer = new Timer();
       timer.Interval = 60000; // 60 seconds
       timer.Elapsed += new ElapsedEventHandler(OnTimer);
-      timer.Start();
+      timer.Start(); // every minute do stuff
     }
 
     private void OnTimer(object sender, ElapsedEventArgs e)
