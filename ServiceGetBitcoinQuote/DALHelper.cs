@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Net;
 
 namespace ServiceGetBitcoinQuote
 {
@@ -7,13 +8,12 @@ namespace ServiceGetBitcoinQuote
   {
     public static string GetConnexionString()
     {
-      return "Data Source=DESKTOP-MSI;Initial Catalog=CryptoCurrencies;Integrated Security=True";
+      return $"Data Source={Dns.GetHostName()};Initial Catalog=CryptoCurrencies;Integrated Security=True";
     }
 
     public static string GetLatestDate()
     {
       string result = string.Empty;
-      //string sqlRequest = "SELECT TOP(1) * FROM BitCoin";
       string connectionString = GetConnexionString();
       string query = "SELECT TOP(1) Date FROM BitCoin order by date DESC";
 
