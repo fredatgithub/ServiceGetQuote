@@ -15,9 +15,9 @@ namespace ServiceGetBitcoinQuote
     {
       InitializeComponent();
       eventLog1 = new EventLog();
-      if (!EventLog.SourceExists("MySource"))
+      if (!EventLog.SourceExists("ServiceGetQuote"))
       {
-        EventLog.CreateEventSource("MySource", "MyNewLog");
+        EventLog.CreateEventSource("ServiceGetQuote", "MyNewLog");
       }
 
       eventLog1.Source = "MySource";
