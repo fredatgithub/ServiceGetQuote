@@ -44,6 +44,7 @@ namespace ServiceGetBitcoinQuote
       this.serviceInstaller1.DisplayName = "Service to Get Bitcoin Quote";
       this.serviceInstaller1.ServiceName = "ServiceGetQuote";
       this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+      this.serviceInstaller1.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
       // 
       // ProjectInstaller
       // 
