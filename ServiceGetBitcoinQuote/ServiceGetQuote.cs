@@ -49,6 +49,7 @@ namespace ServiceGetBitcoinQuote
       var latestDate = DALHelper.GetLatestDate();
       DateTime latestDateFromDB = DateTime.Parse(latestDate);
       bool insertResult = false;
+      
       myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
       myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
       theDate = myDeserializedClass.Time.UpdatedISO;
