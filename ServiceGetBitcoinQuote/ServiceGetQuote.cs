@@ -50,32 +50,27 @@ namespace ServiceGetBitcoinQuote
 
     private async Task DoWorkAsync()
     {
+      // old url
+      // https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCEUR
       // 27/02/2025 new API
       // https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCEUR
       // https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCUSD
       eventLog1.WriteEntry("Getting a quote", EventLogEntryType.Information, eventId++);
       BitcoinAPI bitcoinAPI = new BitcoinAPI();
-      double bitcoinPrice = await bitcoinAPI.GetBitcoinPriceAsync("USDT");
+      double bitcoinPriceUSDT = await bitcoinAPI.GetBitcoinPriceAsync("USDT");
+      eventLog1.WriteEntry($"Quote USDT: {bitcoinPriceUSDT}", EventLogEntryType.Information, eventId++);
       double bitcoinPriceEUR = await bitcoinAPI.GetBitcoinPriceAsync("EUR");
-
-      const string apiUrl = "https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCEUR";
-      var myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
-      Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-      DateTime theDate = myDeserializedClass.Time.UpdatedISO;
-      double rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
-      double rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
-      var latestDate = DALHelper.GetLatestDate();
-      DateTime latestDateFromDB = DateTime.Parse(latestDate);
-      bool insertResult = false;
-      
-      myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
-      myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-      theDate = myDeserializedClass.Time.UpdatedISO;
-      rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
-      rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
-      latestDate = DALHelper.GetLatestDate();
-      latestDateFromDB = DateTime.Parse(latestDate);
-      insertResult = DALHelper.WriteToDatabase(theDate, rateEuros, rateDollar);
+      eventLog1.WriteEntry($"Quote EURO: {bitcoinPriceEUR}", EventLogEntryType.Information, eventId++);
+      DateTime today = DateTime.Now;
+      bool insertResult = DALHelper.WriteToDatabase(today, bitcoinPriceEUR, bitcoinPriceUSDT);
+      if (insertResult)
+      {
+        eventLog1.WriteEntry("Quote written to db successfully", EventLogEntryType.Information, eventId++);
+      }
+      else
+      {
+        eventLog1.WriteEntry("Quote not written to db successfully", EventLogEntryType.Information, eventId++);
+      }
     }
 
     private void OnTimerOld(object sender, ElapsedEventArgs e)
