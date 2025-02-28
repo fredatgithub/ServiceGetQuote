@@ -17,7 +17,6 @@ namespace ServiceGetBitcoinQuote
     public string Rate { get; set; }
     public string Description { get; set; }
     public double Rate_float { get; set; }
-
   }
 
   public class GBP
@@ -27,7 +26,6 @@ namespace ServiceGetBitcoinQuote
     public string Rate { get; set; }
     public string Description { get; set; }
     public double Rate_float { get; set; }
-
   }
 
   public class EUR
@@ -37,7 +35,6 @@ namespace ServiceGetBitcoinQuote
     public string Rate { get; set; }
     public string Description { get; set; }
     public double Rate_float { get; set; }
-
   }
 
   public class Bpi
@@ -45,7 +42,6 @@ namespace ServiceGetBitcoinQuote
     public USD USD { get; set; }
     public GBP GBP { get; set; }
     public EUR EUR { get; set; }
-
   }
 
   public class Root

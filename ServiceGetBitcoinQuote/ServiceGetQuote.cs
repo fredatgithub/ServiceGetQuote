@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace ServiceGetBitcoinQuote
@@ -36,10 +37,27 @@ namespace ServiceGetBitcoinQuote
 
     private void OnTimer(object sender, ElapsedEventArgs e)
     {
+      try
+      {
+        // Fire and forget the async task
+        _ = DoWorkAsync();
+      }
+      catch (Exception ex)
+      {
+        eventLog1.WriteEntry($"Error in OnTimer: {ex.Message}", EventLogEntryType.Error);
+      }
+    }
+
+    private async Task DoWorkAsync()
+    {
       // 27/02/2025 new API
       // https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCEUR
       // https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCUSD
       eventLog1.WriteEntry("Getting a quote", EventLogEntryType.Information, eventId++);
+      BitcoinAPI bitcoinAPI = new BitcoinAPI();
+      double bitcoinPrice = await bitcoinAPI.GetBitcoinPriceAsync("USDT");
+      double bitcoinPriceEUR = await bitcoinAPI.GetBitcoinPriceAsync("EUR");
+
       const string apiUrl = "https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCEUR";
       var myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
       Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
@@ -62,25 +80,24 @@ namespace ServiceGetBitcoinQuote
 
     private void OnTimerOld(object sender, ElapsedEventArgs e)
     {
-      // TODO: Insert monitoring activities here.
-      eventLog1.WriteEntry("Getting a quote", EventLogEntryType.Information, eventId++);
-      const string apiUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
-      var myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
-      Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-      DateTime theDate = myDeserializedClass.Time.UpdatedISO;
-      double rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
-      double rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
-      var latestDate = DALHelper.GetLatestDate();
-      DateTime latestDateFromDB = DateTime.Parse(latestDate);
-      bool insertResult = false;
-      myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
-      myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-      theDate = myDeserializedClass.Time.UpdatedISO;
-      rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
-      rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
-      latestDate = DALHelper.GetLatestDate();
-      latestDateFromDB = DateTime.Parse(latestDate);
-      insertResult = DALHelper.WriteToDatabase(theDate, rateEuros, rateDollar);
+      //eventLog1.WriteEntry("Getting a quote", EventLogEntryType.Information, eventId++);
+      //const string apiUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
+      //var myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
+      //Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+      //DateTime theDate = myDeserializedClass.Time.UpdatedISO;
+      //double rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
+      //double rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
+      //var latestDate = DALHelper.GetLatestDate();
+      //DateTime latestDateFromDB = DateTime.Parse(latestDate);
+      //bool insertResult = false;
+      //myJsonResponse = InternetHelper.GetAPIFromUrl(apiUrl);
+      //myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+      //theDate = myDeserializedClass.Time.UpdatedISO;
+      //rateEuros = myDeserializedClass.Bpi.EUR.Rate_float;
+      //rateDollar = myDeserializedClass.Bpi.USD.Rate_float;
+      //latestDate = DALHelper.GetLatestDate();
+      //latestDateFromDB = DateTime.Parse(latestDate);
+      //insertResult = DALHelper.WriteToDatabase(theDate, rateEuros, rateDollar);
     }
 
     protected override void OnStop()

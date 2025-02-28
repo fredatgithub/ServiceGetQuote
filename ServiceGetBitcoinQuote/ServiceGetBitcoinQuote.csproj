@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitcoinAPI.cs" />
     <Compile Include="DALHelper.cs" />
     <Compile Include="InternetHelper.cs" />
     <Compile Include="ProjectInstaller.cs">
