@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
@@ -29,8 +28,11 @@ namespace ServiceGetBitcoinQuote
     {
       eventLog1.WriteEntry("Démarrage du service GetQuote.");
       // Set up a timer that triggers every minute.
-      Timer timer = new Timer();
-      timer.Interval = 60000; // 60 seconds
+      Timer timer = new Timer
+      {
+        Interval = 60000 // 60 seconds
+      };
+
       timer.Elapsed += new ElapsedEventHandler(OnTimer);
       timer.Start(); // every minute do stuff
     }
