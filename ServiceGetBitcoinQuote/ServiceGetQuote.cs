@@ -44,9 +44,9 @@ namespace ServiceGetBitcoinQuote
         // Fire and forget the async task
         _ = DoWorkAsync();
       }
-      catch (Exception ex)
+      catch (Exception exception)
       {
-        eventLog1.WriteEntry($"Error in OnTimer: {ex.Message}", EventLogEntryType.Error);
+        eventLog1.WriteEntry($"Error in OnTimer: {exception.Message}", EventLogEntryType.Error);
       }
     }
 
@@ -73,6 +73,8 @@ namespace ServiceGetBitcoinQuote
       {
         eventLog1.WriteEntry("Quote not written to db successfully", EventLogEntryType.Information, eventId++);
       }
+
+      bitcoinAPI = null;
     }
 
     private void OnTimerOld(object sender, ElapsedEventArgs e)
