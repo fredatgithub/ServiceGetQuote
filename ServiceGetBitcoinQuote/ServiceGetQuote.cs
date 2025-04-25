@@ -64,6 +64,11 @@ namespace ServiceGetBitcoinQuote
       double bitcoinPriceEUR = await bitcoinAPI.GetBitcoinPriceAsync("EUR");
       eventLog1.WriteEntry($"Quote EURO: {bitcoinPriceEUR}", EventLogEntryType.Information, eventId++);
       DateTime today = DateTime.Now;
+      if (bitcoinPriceEUR == 0 || bitcoinPriceUSDT == 0)
+      {
+        return;
+      }
+
       bool insertResult = DALHelper.WriteToDatabase(today, bitcoinPriceEUR, bitcoinPriceUSDT);
       if (insertResult)
       {
